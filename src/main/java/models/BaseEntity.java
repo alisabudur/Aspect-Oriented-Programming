@@ -13,7 +13,7 @@ public abstract class BaseEntity {
 
     public BaseEntity(){
         try {
-            FileHandler fh = new FileHandler("D:\\Facultate\\Semestrul 6\\Aop\\logs\\log.txt");
+            FileHandler fh = new FileHandler("D:\\Facultate\\Semestrul 6\\Aop\\Aspect-Oriented-Programming\\logs\\log.txt");
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
