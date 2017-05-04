@@ -27,8 +27,8 @@ public class Main extends BaseEntity{
         }
 
 
-        blog.addObserver(user1);
-        blog.addObserver(user2);
+        blog.addUser(user1);
+        blog.addUser(user2);
 
         Comment comment = new Comment();
         comment.setText("CCCCBBBBB");

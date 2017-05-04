@@ -1,16 +1,13 @@
 package models;
-
-import models.observer.Observer;
-import models.observer.Subject;
-
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by Alisa on 3/13/2017.
  */
-public class Blog extends Subject<Blog> {
+public class Blog {
 
     private Integer id;
 
@@ -18,13 +15,17 @@ public class Blog extends Subject<Blog> {
 
     private Set<Comment> comments;
 
+    private List<User> users;
+
     public Blog(Integer id, String name, Set<Comment> comments) {
         this.id = id;
         this.name = name;
         this.comments = comments;
+        this.users = new ArrayList<>();
     }
 
     public Blog() {
+        this.users = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -51,6 +52,7 @@ public class Blog extends Subject<Blog> {
         this.comments = comments;
     }
 
+    @UpdateSubject
     public void addComment(Comment comment) {
         try {
             if (comments == null) {
@@ -58,42 +60,18 @@ public class Blog extends Subject<Blog> {
             }
             comment.setBlog(this);
             comments.add(comment);
-            notifyObservers();
+//            notifyObservers();
         } catch (Exception e) {
             throw e;
         } finally {
         }
     }
 
-    @Override
-    public void addObserver(Observer<Blog> observer) {
-        try {
-            observer.setSubject(this);
-            observers.add(observer);
-        }catch (Exception e){
-            throw e;
-        }finally {
-        }
+    public void addUser(User user){
+        users.add(user);
     }
 
-    @Override
-    public void removeObserver(Observer<Blog> observer) {
-        try {
-            observers.remove(observer);
-        }catch (Exception e){
-            throw e;
-        }finally {
-        }
-    }
-
-    @Override
-    public void notifyObservers() {
-        try{
-            observers.forEach(blogObserver -> blogObserver.update(this));
-        }
-        catch (Exception e){
-            throw e;
-        }finally {
-        }
+    public void removeUser(User user){
+        users.remove(user);
     }
 }

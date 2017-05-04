@@ -7,7 +7,7 @@ import javax.persistence.*;
 /**
  * Created by Alisa on 3/6/2017.
  */
-public class User extends Observer<Blog> {
+public class User{
 
     private Integer id;
 
@@ -19,16 +19,6 @@ public class User extends Observer<Blog> {
     }
 
     public User() {
-    }
-
-    @Override
-    public void update(Blog blog) {
-        try {
-            subject.setComments(blog.getComments());
-        } catch (Exception e) {
-            throw e;
-        } finally {
-        }
     }
 
     public Integer getId() {
