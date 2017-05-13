@@ -46,4 +46,12 @@ public class BlogService implements IBlogService {
         } finally {
         }
     }
+
+    public IBlogRepository getBlogRepository() {
+        return blogRepository;
+    }
+
+    public void setBlogRepository(IBlogRepository blogRepository) {
+        this.blogRepository = blogRepository;
+    }
 }

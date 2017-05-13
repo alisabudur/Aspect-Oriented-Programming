@@ -7,6 +7,7 @@ import repositories.UserRepository;
 import repositories.interfaces.IUserRepository;
 import services.interfaces.IUserService;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -45,5 +46,13 @@ public class UserService implements IUserService {
             throw e;
         } finally {
         }
+    }
+
+    public IUserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public void setUserRepository(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

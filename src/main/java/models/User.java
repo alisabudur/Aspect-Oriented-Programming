@@ -2,7 +2,6 @@ package models;
 
 import models.observer.Observer;
 
-import javax.persistence.*;
 
 /**
  * Created by Alisa on 3/6/2017.

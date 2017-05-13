@@ -11,23 +11,23 @@ import org.aspectj.lang.annotation.Pointcut;
  */
 @Aspect
 public class PerformanceMonitoringAspect {
-    private Logger logger = Logger.getLogger("Performance");
-
-    @Pointcut("execution(public * *(..))")
-    public void performancePublicMethods(){}
-
-    @Around("performancePublicMethods()")
-    public Object getPerformance(ProceedingJoinPoint jp){
-        long start = System.nanoTime();
-        try {
-            return jp.proceed();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        } finally {
-            long complete = System.nanoTime();
-            logger.info("Operation " + jp.getSignature().toShortString()
-                    + " took " + (complete - start) + " nanoseconds");
-        }
-        return null;
-    }
+//    private Logger logger = Logger.getLogger("Performance");
+//
+//    @Pointcut("execution(public * *(..))")
+//    public void performancePublicMethods(){}
+//
+//    @Around("performancePublicMethods()")
+//    public Object getPerformance(ProceedingJoinPoint jp){
+//        long start = System.nanoTime();
+//        try {
+//            return jp.proceed();
+//        } catch (Throwable throwable) {
+//            throwable.printStackTrace();
+//        } finally {
+//            long complete = System.nanoTime();
+//            logger.info("Operation " + jp.getSignature().toShortString()
+//                    + " took " + (complete - start) + " nanoseconds");
+//        }
+//        return null;
+//    }
 }

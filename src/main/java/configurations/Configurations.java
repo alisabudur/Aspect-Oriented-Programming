@@ -2,6 +2,8 @@ package configurations;
 
 import aspects.CashingAspect;
 import aspects.PerformanceMonitoringAspect;
+import aspects.security.AuthenticationSupport;
+import aspects.security.IAuthenticationSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -11,7 +13,9 @@ import repositories.UserRepository;
 import repositories.interfaces.IBlogRepository;
 import repositories.interfaces.IUserRepository;
 import services.BlogService;
+import services.LoginService;
 import services.interfaces.IBlogService;
+import services.interfaces.ILoginService;
 import services.interfaces.IUserService;
 import services.UserService;
 
@@ -19,7 +23,7 @@ import services.UserService;
  * Created by Alisa on 3/12/2017.
  */
 @Configuration
-@Import(JdbcConfig.class)
+@Import({JdbcConfig.class, SecurityConfig.class})
 @EnableAspectJAutoProxy
 public class Configurations {
 
@@ -44,8 +48,22 @@ public class Configurations {
     }
 
     @Bean
-    public CashingAspect cashingAspect(){ return new CashingAspect();}
+    public ILoginService loginService() {
+        return new LoginService();
+    }
 
     @Bean
-    public PerformanceMonitoringAspect performanceMonitoringAspect(){ return new PerformanceMonitoringAspect();}
+    public IAuthenticationSupport authenticationSupport() {
+        return new AuthenticationSupport();
+    }
+
+    @Bean
+    public CashingAspect cashingAspect() {
+        return new CashingAspect();
+    }
+
+    @Bean
+    public PerformanceMonitoringAspect performanceMonitoringAspect() {
+        return new PerformanceMonitoringAspect();
+    }
 }

@@ -6,6 +6,10 @@ import models.User;
 import org.apache.log4j.BasicConfigurator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+import services.BlogService;
+import services.UserService;
 import services.interfaces.IBlogService;
 import services.interfaces.IUserService;
 
@@ -15,9 +19,10 @@ import services.interfaces.IUserService;
 public class Main extends BaseEntity{
     public static void main(String[] arg){
         BasicConfigurator.configure();
-        ApplicationContext context = new AnnotationConfigApplicationContext(Configurations.class);
-        IUserService userService = context.getBean(IUserService.class);
-        IBlogService blogService = context.getBean(IBlogService.class);
+        ApplicationContext context = new FileSystemXmlApplicationContext("D:\\Facultate\\Semestrul 6\\Aop\\Labs\\Aspect-Oriented-Programming\\src\\main\\resources\\SpringConfig.xml") {
+        };
+        IUserService userService = context.getBean(UserService.class);
+        IBlogService blogService = context.getBean(BlogService.class);
 
         User user1 = null;
         User user2 = null;
