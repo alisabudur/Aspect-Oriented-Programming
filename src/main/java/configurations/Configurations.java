@@ -1,7 +1,10 @@
 package configurations;
 
+import aspects.CashingAspect;
+import aspects.PerformanceMonitoringAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import repositories.BlogRepository;
 import repositories.UserRepository;
@@ -17,6 +20,7 @@ import services.UserService;
  */
 @Configuration
 @Import(JdbcConfig.class)
+@EnableAspectJAutoProxy
 public class Configurations {
 
     @Bean
@@ -38,4 +42,10 @@ public class Configurations {
     public IUserRepository userRepository() {
         return new UserRepository();
     }
+
+    @Bean
+    public CashingAspect cashingAspect(){ return new CashingAspect();}
+
+    @Bean
+    public PerformanceMonitoringAspect performanceMonitoringAspect(){ return new PerformanceMonitoringAspect();}
 }
