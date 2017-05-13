@@ -24,6 +24,11 @@ public class Blog {
         this.users = new ArrayList<>();
     }
 
+    public Blog(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Blog() {
         this.users = new ArrayList<>();
     }

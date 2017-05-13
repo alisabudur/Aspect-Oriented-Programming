@@ -1,10 +1,13 @@
+import configurations.Configurations;
 import models.BaseEntity;
 import models.Blog;
 import models.Comment;
 import models.User;
 import org.apache.log4j.BasicConfigurator;
-import services.BlogService;
-import services.UserService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import services.interfaces.IBlogService;
+import services.interfaces.IUserService;
 
 /**
  * Created by Alisa on 3/12/2017.
@@ -12,8 +15,9 @@ import services.UserService;
 public class Main extends BaseEntity{
     public static void main(String[] arg){
         BasicConfigurator.configure();
-        UserService userService = new UserService();
-        BlogService blogService = new BlogService();
+        ApplicationContext context = new AnnotationConfigApplicationContext(Configurations.class);
+        IUserService userService = context.getBean(IUserService.class);
+        IBlogService blogService = context.getBean(IBlogService.class);
 
         User user1 = null;
         User user2 = null;
@@ -26,12 +30,11 @@ public class Main extends BaseEntity{
             e.printStackTrace();
         }
 
-
         blog.addUser(user1);
         blog.addUser(user2);
 
         Comment comment = new Comment();
-        comment.setText("CCCCBBBBB");
+        comment.setText("CCCC");
         blog.addComment(comment);
 
         try {

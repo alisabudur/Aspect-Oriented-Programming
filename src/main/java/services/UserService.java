@@ -2,7 +2,9 @@ package services;
 
 import models.BaseEntity;
 import models.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import repositories.UserRepository;
+import repositories.interfaces.IUserRepository;
 import services.interfaces.IUserService;
 
 import java.util.List;
@@ -10,13 +12,10 @@ import java.util.List;
 /**
  * Created by Alisa on 3/12/2017.
  */
-public class UserService extends BaseEntity implements IUserService {
+public class UserService implements IUserService {
 
-    private UserRepository userRepository;
-
-    public UserService() {
-        this.userRepository = new UserRepository();
-    }
+    @Autowired
+    private IUserRepository userRepository;
 
     @Override
     public void save(User user) throws Exception {
@@ -31,7 +30,7 @@ public class UserService extends BaseEntity implements IUserService {
     @Override
     public List<User> getAll() throws Exception {
         try {
-            return userRepository.findAll();
+            return userRepository.getAll();
         } catch (Exception e) {
             throw e;
         } finally {

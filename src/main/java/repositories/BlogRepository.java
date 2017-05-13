@@ -1,210 +1,40 @@
 package repositories;
 
 import models.Blog;
-import models.Comment;
-import models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import repositories.interfaces.IBlogRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
- * Created by Alisa on 5/2/2017.
+ * Created by Alisa on 5/13/2017.
  */
-public class BlogRepository {
 
-    public void save(Blog blog) throws Exception {
+@Repository
+public class BlogRepository implements IBlogRepository{
 
-        Connection connection = null;
-        PreparedStatement statement = null;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-        try {
-            connection = DbConnection.openConnection();
-            statement = connection.prepareStatement(
-                    "INSERT INTO Blogs(Name) VALUES (?)");
-            statement.setString(1, blog.getName());
-
-            statement.executeUpdate();
-
-            addComments(blog.getComments());
-
-        } catch (SQLException e) {
-            throw new Exception("Error occurred!", e);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public List<Blog> getAll() {
+        String sql = "select * from Blogs";
+        return jdbcTemplate.query(sql, (rs, i) -> new Blog(rs.getInt("Id"), rs.getString("Name")));
     }
 
-    public void update(Blog blog) throws Exception {
-
-        Connection connection = null;
-        PreparedStatement statement = null;
-
-        try {
-
-            connection = DbConnection.openConnection();
-            statement = connection.prepareStatement(
-                    "UPDATE Blogs SET Name = ?");
-            statement.setString(1, blog.getName());
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-
-            throw new Exception("Error occurred!", e);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public void save(Blog blog) {
+        String sql = "insert into Blogs (Name) values (?)";
+        jdbcTemplate.update(sql, blog.getName());
     }
 
-    public List<Blog> findAll() throws Exception {
-
-        Connection connection = null;
-        PreparedStatement statement = null;
-
-        try {
-            connection = DbConnection.openConnection();
-
-            String sql = "SELECT Id, Name FROM Blogs";
-            statement = connection.prepareStatement(sql);
-            ResultSet result = statement.executeQuery();
-
-            List<Blog> blogs = new ArrayList<>();
-            while (result.next()) {
-                Blog blog = new Blog();
-                blog.setId(result.getInt("Id"));
-                blog.setName(result.getString("Name"));
-                blogs.add(blog);
-            }
-            return blogs;
-        } catch (SQLException e) {
-
-            throw new Exception("Error occurred!", e);
-        } finally {
-
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public Blog findOne(Integer id) throws Exception {
-
-        Connection connection = null;
-        PreparedStatement statement = null;
-
-        try {
-
-            connection = DbConnection.openConnection();
-
-            String sql = "SELECT id, name FROM Blogs WHERE id = ?";
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, id);
-            ResultSet result = statement.executeQuery();
-
-            Blog blog = null;
-            if (result.next()) {
-                blog = new Blog();
-                blog.setId(result.getInt("Id"));
-                blog.setName(result.getString("Name"));
-            }
-            return blog;
-        } catch (SQLException e) {
-            throw new Exception("Error occurred!", e);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return new Blog();
-    }
-
-    private void addComments(Set<Comment> comments) throws Exception {
-        Connection connection = null;
-        PreparedStatement statement = null;
-
-        try {
-            connection = DbConnection.openConnection();
-            for (Comment comment: comments) {
-                statement = connection.prepareStatement(
-                        "INSERT INTO Comments(CommentText, BlogId) VALUES (?, ?)");
-                statement.setString(1, comment.getText());
-                statement.setString(2, comment.getBlog().getId().toString());
-                statement.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            throw new Exception("Error occurred!", e);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public Blog findOne(Integer id) {
+        String sql = "select * from Users where Id=?";
+        Blog user = jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Blog.class), id);
+        return user;
     }
 }
